@@ -53,5 +53,10 @@ class User(AbstractBaseUser , PermissionsMixin, BaseModel):
         super().save(*args, **kwargs)
         
         
+    @classmethod
+    def get_by_natural_key(cls, email):
+        # Return a user instance based on the natural key (which in this case is the email)
+        return cls.objects.get(email=email)
+        
     def __str__(self):
         return self.email
