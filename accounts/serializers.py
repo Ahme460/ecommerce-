@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import User
 from django.contrib.auth import authenticate
 import random
+from django.conf import settings 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -67,7 +68,7 @@ class SendResetCodeSerializer(serializers.Serializer):
         send_mail(
             'Your Password Reset Code',
             f'Your reset code is: {code}',
-            'no-reply@yourdomain.com',  # لازم تضبط الإيميل ده في settings
+            settings.DEFAULT_FROM_EMAIL,  # لازم تضبط الإيميل ده في settings
             [email],
             fail_silently=False,
         )
