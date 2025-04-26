@@ -13,3 +13,4 @@ urlpatterns = [
     path('check-reset-code/', CheckResetCodeView.as_view(), name='check_reset_code'),
     path('reset-password/', ResetPasswordView.as_view(), name='reset-password'),
 ]
+##
