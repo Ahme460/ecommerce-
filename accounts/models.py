@@ -46,7 +46,7 @@ class User(AbstractBaseUser , PermissionsMixin, BaseModel):
     phone=models.CharField(max_length=50)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
     
     def save(self, *args, **kwargs):
         self.email = self.email.lower()
