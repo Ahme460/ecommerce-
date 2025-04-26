@@ -89,7 +89,7 @@ class CheckResetCodeSerializer(serializers.Serializer):
         except User.DoesNotExist:
             raise serializers.ValidationError("User with this email does not exist.")
 
-        if user.reset_code != reset_code:
+        if str(user.reset_code) != str(reset_code):
             raise serializers.ValidationError("Invalid reset code.")
 
         data['user'] = user
