@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    'auth',
+    'accounts',
     "corsheaders",
 
 ]
@@ -137,7 +137,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-AUTH_USER_MODEL = 'auth.User'  
+AUTH_USER_MODEL = 'accounts.User'  
 
 
 REST_FRAMEWORK = {
