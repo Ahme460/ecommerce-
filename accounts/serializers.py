@@ -77,7 +77,7 @@ class SendResetCodeSerializer(serializers.Serializer):
 class CheckResetCodeSerializer(serializers.Serializer):
     email = serializers.EmailField()
     reset_code = serializers.CharField(max_length=6)
-    new_password = serializers.CharField(write_only=True)
+
 
     def validate(self, data):
         email = data.get('email')
