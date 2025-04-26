@@ -36,7 +36,9 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, password, **extra_fields)
 
-
+    def get_by_natural_key(self, email):
+        # This method will now return a user based on the provided email.
+        return self.get(email=email)
 
 
 class User(AbstractBaseUser , PermissionsMixin, BaseModel):
@@ -53,10 +55,7 @@ class User(AbstractBaseUser , PermissionsMixin, BaseModel):
         super().save(*args, **kwargs)
         
         
-    @classmethod
-    def get_by_natural_key(cls, email):
-        # Return a user instance based on the natural key (which in this case is the email)
-        return cls.objects.get(email=email)
+    objects = CustomUserManager()
         
     def __str__(self):
         return self.email
