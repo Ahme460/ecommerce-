@@ -67,10 +67,22 @@ class WishlistDetailView(generics.RetrieveDestroyAPIView):
 
 
 # ---------- Cart ----------
-class CartListCreateView(generics.ListAPIView):
-    serializer_class = CartSerializer
-    def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)
+# class CartListCreateView(generics.ListAPIView):
+#     serializer_class = CartSerializer
+#     def get_queryset(self):
+#         return Cart.objects.filter(user=self.request.user)
+
+
+class CartListCreateView(APIView):
+    
+    permission_classes=[IsAuthenticated]
+    def get(self,request):
+        cart=Cart.objects.get_or_create(user=request.user)
+        serializer=CartItemSerializer(cart)
+        return Response(serializer.data)
+    
+
+
 
 
 class CartDetailView(generics.RetrieveUpdateDestroyAPIView):
