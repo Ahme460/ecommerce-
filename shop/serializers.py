@@ -47,8 +47,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class CategorySerializerOnly(serializers.ModelSerializer):
-    category_product=BoxSerializer(many=True ,read_only=True)
-    category_box=ProductSerializer(many=True ,read_only=True)
+    category_product= ProductSerializer(many=True ,read_only=True)
+    category_box= BoxSerializer(many=True ,read_only=True)
     
     class Meta:
         model = Category

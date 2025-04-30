@@ -24,7 +24,7 @@ class BoxListCreateView(generics.ListCreateAPIView):
     serializer_class = BoxSerializer
 
 class BoxDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Box.objects.all()
+    queryset = Box.objects.all().prefetch_related('products')
     serializer_class = BoxSerializer
     lookup_field = 'id'
 
@@ -35,7 +35,7 @@ class CategoryListCreateView(generics.ListAPIView):
     serializer_class = CategorySerializer
 
 class CategoryDetailView(generics.RetrieveAPIView):
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().prefetch_related('category_box','category_product')
     serializer_class = CategorySerializerOnly
     lookup_field = 'id'
 
