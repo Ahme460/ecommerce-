@@ -38,6 +38,7 @@ class Box(BaseModel):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     products = models.ManyToManyField(Product, related_name='box')
+    stock = models.PositiveIntegerField(default=10)
     type=models.CharField(max_length=50,default='box')
 
     def __str__(self):
