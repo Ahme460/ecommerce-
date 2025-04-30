@@ -64,6 +64,7 @@ class WishlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wishlist
         fields = "__all__"
+        read_only_fields = ("user", "content_type", "object_id")
 
     def get_content_object(self, obj):
         if isinstance(obj.content_object, Product):
