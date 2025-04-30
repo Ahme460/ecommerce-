@@ -8,11 +8,11 @@ from .serializers import *
 from .utls import total
 
 # ---------- Product ----------
-class ProductListCreateView(generics.ListCreateAPIView):
+class ProductListCreateView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
+class ProductDetailView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'id'
