@@ -77,8 +77,8 @@ class CartListCreateView(APIView):
     
     permission_classes=[IsAuthenticated]
     def get(self,request):
-        cart=Cart.objects.get_or_create(user=request.user)
-        serializer=CartItemSerializer(cart)
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        serializer = CartItemSerializer(cart.items.all(), many=True)
         return Response(serializer.data)
     
 
