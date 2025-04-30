@@ -6,6 +6,21 @@ from .models import (
     Box, BoxImage,
     Wishlist, Cart, CartItem
 )
+from django.contrib.sessions.models import Session
+
+
+@admin.register(Session)
+class SessionAdmin(admin.ModelAdmin):
+    list_display = ['session_key', 'get_decoded', 'expire_date']
+    
+    def get_decoded(self, obj):
+        try:
+            return obj.get_decoded()
+        except:
+            return "Could not decode"
+    
+    get_decoded.short_description = 'Session Data'
+
 
 
 class ProductImageInline(admin.TabularInline):
