@@ -1,7 +1,9 @@
+from decimal import Decimal
 
-
-def total(data):
-    total_price=0
-    for i in data:
-        total_price+=i['data']['price'] * i['quantity']
+def total(cart_items):
+    total_price = Decimal('0.00')
+    for item in cart_items:
+        price = Decimal(str(item['data']['price']))
+        quantity = int(item['quantity'])
+        total_price += price * quantity
     return total_price
