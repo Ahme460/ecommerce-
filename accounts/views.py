@@ -4,7 +4,7 @@ from rest_framework import status
 from .serializers import *
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated ,AllowAny
-
+from .utls import sync_cart_to_db
 
 
 def get_tokens_for_user(user):
@@ -20,6 +20,7 @@ class RegisterView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             tokens = get_tokens_for_user(user)
+            sync_cart_to_db(request, user)
             return Response(tokens, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -29,6 +30,7 @@ class LoginView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data
             tokens = get_tokens_for_user(user)
+            sync_cart_to_db(request, user)
             return Response(tokens, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -2,10 +2,10 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.contenttypes.models import ContentType
-
+from rest_framework.permissions import AllowAny ,IsAuthenticated
 from .models import *
 from .serializers import *
-
+from .utls import total
 
 # ---------- Product ----------
 class ProductListCreateView(generics.ListCreateAPIView):
@@ -21,22 +21,22 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
 # ---------- Box ----------
 class BoxListCreateView(generics.ListCreateAPIView):
     queryset = Box.objects.all()
-    serializer_class = BookSerializer
+    serializer_class = BoxSerializer
 
 class BoxDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Box.objects.all()
-    serializer_class = BookSerializer
+    serializer_class = BoxSerializer
     lookup_field = 'id'
 
 
 # ---------- Category ----------
-class CategoryListCreateView(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
+class CategoryListCreateView(generics.ListAPIView):
+    queryset = Category.objects.all().prefetch_related('category_box','category_product')
     serializer_class = CategorySerializer
 
-class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+class CategoryDetailView(generics.RetrieveAPIView):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    serializer_class = CategorySerializerOnly
     lookup_field = 'id'
 
 
@@ -105,5 +105,53 @@ class CartItemCreateView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self,request):
-        
+        pass
+
+
+class CartSession(APIView):
+    permission_classes=[AllowAny]
+    
+    def post(self,request):
+        item_type=request.data.get('type',None)
+        id_item=request.data.get('id',None)
+        quantity =request.data.get('quantity',None)
+        cart = request.session.get("cart", {})
+        key = f"{item_type}_{id_item}"
+        if key in cart:
+            cart[key]["quantity"] += quantity
+        else:
+            cart[key] = {"quantity": quantity}
+        request.session["cart"] = cart
+        return Response({"message": "Added to cart", "cart": cart})
+
+
+class ViewCartAPIView(APIView):
+    permission_classes=[AllowAny]
+    def get(self, request):
+        cart = request.session.get("cart", {})
+        result = []
+
+        for key, value in cart.items():
+            item_type, item_id = key.split("_")
+            if item_type == "product":
+                item = Product.objects.filter(id=item_id).first()
+                serializer = ProductSerializer(item) if item else None
+            elif item_type == "box":
+                item = Box.objects.filter(id=item_id).first()
+                serializer = BoxSerializer(item) if item else None
+            else:
+                serializer = None
+
+            if serializer:
+                result.append({
+                    "type": item_type,
+                    "data": serializer.data,
+                    "quantity": value["quantity"]
+                })
+        total_price = total(result)
+            
+        return Response({
+            "items": result,
+            "total": total_price
+        })
         

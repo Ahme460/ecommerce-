@@ -21,7 +21,7 @@ class Product(BaseModel):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name='category_product')
 
     def __str__(self):
         return self.name
@@ -34,6 +34,7 @@ class ProductImage(BaseModel):
         return f"Image of {self.product.name}"
 
 class Box(BaseModel):
+    category= models.ForeignKey(Category,on_delete=models.CASCADE,related_name='category_box')
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     products = models.ManyToManyField(Product, related_name='box')
@@ -46,7 +47,7 @@ class BoxImage(BaseModel):
     image = models.ImageField(upload_to='boxs/')
 
     def __str__(self):
-        return f"Image of {self.book.name}"
+        return f"Image of {self.box.name}"
 
 class Wishlist(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

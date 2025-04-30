@@ -25,7 +25,7 @@ class BoxsImageSerializer(serializers.ModelSerializer):
 
 
 
-class BookSerializer(serializers.ModelSerializer):
+class BoxSerializer(serializers.ModelSerializer):
     images = BoxsImageSerializer(many=True, read_only=True)
     box = ProductSerializer(many=True, read_only=True)
 
@@ -35,10 +35,23 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
+
+
+class CategorySerializerOnly(serializers.ModelSerializer):
+    category_product=BoxSerializer(many=True ,read_only=True)
+    category_box=ProductSerializer(many=True ,read_only=True)
+    
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+    
 
 
 
@@ -53,7 +66,7 @@ class WishlistSerializer(serializers.ModelSerializer):
         if isinstance(obj.content_object, Product):
             return ProductSerializer(obj.content_object).data
         elif isinstance(obj.content_object, Box):
-            return BookSerializer(obj.content_object).data
+            return BoxSerializer(obj.content_object).data
         return None
 
 
@@ -70,7 +83,7 @@ class CartItemSerializer(serializers.ModelSerializer):
         if isinstance(obj.content_object, Product):
             return ProductSerializer(obj.content_object).data
         elif isinstance(obj.content_object, Box):
-            return BookSerializer(obj.content_object).data
+            return BoxSerializer(obj.content_object).data
         return None
 
 
