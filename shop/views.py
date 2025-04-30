@@ -20,7 +20,7 @@ class ProductDetailView(generics.RetrieveAPIView):
 
 # ---------- Box ----------
 class BoxListCreateView(generics.ListCreateAPIView):
-    queryset = Box.objects.all()
+    queryset = Box.objects.all().prefetch_related('products')
     serializer_class = BoxSerializer
 
 class BoxDetailView(generics.RetrieveUpdateDestroyAPIView):

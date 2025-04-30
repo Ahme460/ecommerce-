@@ -28,10 +28,13 @@ class BoxsImageSerializer(serializers.ModelSerializer):
 class BoxSerializer(serializers.ModelSerializer):
     images = BoxsImageSerializer(many=True, read_only=True)
     products = ProductSerializer(many=True, read_only=True)
-
+    category=serializers.SerializerMethodField()
     class Meta:
         model = Box
         fields = '__all__'
+
+    def get_category(self,obj):
+        return obj.category.name
 
 
 
