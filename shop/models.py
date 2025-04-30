@@ -22,7 +22,7 @@ class Product(BaseModel):
     stock = models.PositiveIntegerField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
     category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name='category_product')
-
+    type=models.CharField(max_length=50,default='product')
     def __str__(self):
         return self.name
 
@@ -38,6 +38,7 @@ class Box(BaseModel):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     products = models.ManyToManyField(Product, related_name='box')
+    type=models.CharField(max_length=50,default='box')
 
     def __str__(self):
         return self.name
