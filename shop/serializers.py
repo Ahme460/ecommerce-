@@ -84,12 +84,13 @@ class CartItemSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_content_object(self, obj):
-        if isinstance(obj.content_object, Product):
-            return ProductSerializer(obj.content_object).data
-        elif isinstance(obj.content_object, Box):
-            return BoxSerializer(obj.content_object).data
-        return None
-
+        try:
+            if isinstance(obj.content_object, Product):
+                return ProductSerializer(obj.content_object).data
+            elif isinstance(obj.content_object, Box):
+                return BoxSerializer(obj.content_object).data
+        except AttributeError:
+            return None
 
 class CartSerializer(serializers.ModelSerializer):
     items=CartItemSerializer(many=True)
