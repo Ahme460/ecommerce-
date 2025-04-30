@@ -57,14 +57,14 @@ class Wishlist(BaseModel):
     content_object = GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):
-        return f"{self.user.username} - {self.content_object}"
+        return f"{self.user.email} - {self.content_object}"
 
 
 class Cart(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.user.username}'s Cart"
+        return f"{self.user.email}'s Cart"
 
 
 
